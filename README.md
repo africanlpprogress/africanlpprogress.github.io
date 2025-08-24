@@ -1,82 +1,108 @@
-# AfricanNLP-progress 🌍
+# Tracking Progress in African Natural Language Processing
 
-[![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](#how-to-contribute)
-[![License: CC BY 4.0](https://img.shields.io/badge/License-CC%20BY%204.0-blue.svg)](LICENSE)
-[![Focus: AfricaNLP](https://img.shields.io/badge/Focus-AfricaNLP-informational.svg)](#scope)
-[![Last Updated](https://img.shields.io/badge/last--updated-2025--08--24-black.svg)](#)
+## Table of contents
 
-> A community-maintained, task-oriented leaderboard of results for **African languages**, starting with **Hausa (ha)**, **Swahili (sw)**, and **Yoruba (yo)**.  
-> Inspired by the excellent [NLP-progress] and aligned with ACL/EMNLP reporting norms.
+### Hausa
+  * [Machine translation](hausa/machine_translation.md)
+  * [Sentiment analysis](hausa/sentiment_analysis.md)
+  * [Hate/abusive speech](hausa/hate_speech.md)
+  * [Language modeling](hausa/language_modeling.md)
+  * [Common sense](hausa/common_sense.md)
+  * [Multimodal](hausa/multimodal.md)
 
-<p align="center">
-  <img src="assets/banner.png" alt="AfricanNLP-progress" width="85%"/>
-</p>
+### Swahili
+  * [Machine translation](swahili/machine_translation.md)
+  * [Sentiment analysis](swahili/sentiment_analysis.md)
+  * [Hate/abusive speech](swahili/hate_speech.md)
+  * [Language modeling](swahili/language_modeling.md)
+  * [Common sense](swahili/common_sense.md)
+  * [Multimodal](swahili/multimodal.md)
 
-## Scope
+### Yoruba
+  * [Machine translation](yoruba/machine_translation.md)
+  * [Sentiment analysis](yoruba/sentiment_analysis.md)
+  * [Hate/abusive speech](yoruba/hate_speech.md)
+  * [Language modeling](yoruba/language_modeling.md)
+  * [Common sense](yoruba/common_sense.md)
+  * [Multimodal](yoruba/multimodal.md)
 
-We track paper-reported results for core NLP and speech tasks with **clear dataset splits and metrics**. Initial tasks:
+---
 
-- **Core NLP:** Machine Translation, Sentiment Analysis, Hate Speech
-- **Additional (mirroring NLP-progress categories):** Language Modeling, Common Sense Reasoning, Multimodal (e.g., ASR/TTS/Vision+Language)
+This document tracks progress in **African NLP** by summarizing benchmark datasets and **state-of-the-art (SOTA)** results for common tasks across Hausa, Swahili, and Yoruba. As with similar efforts, we aim to provide a concise, task-centric entry point and point readers to official leaderboards when those exist and are actively maintained. :contentReference[oaicite:1]{index=1}
 
-> Languages covered (v0.1): **Hausa (ha), Swahili (sw), Yoruba (yo)**.  
-> We welcome PRs adding more African languages and tasks.
+If a public leaderboard exists and is regularly updated for a task, we link to it directly from the task page rather than duplicating maintenance here. :contentReference[oaicite:2]{index=2}
 
-## Quick Links
+---
 
-- **Hausa:**  
-  [Machine Translation](hausa/machine_translation.md) ·
-  [Sentiment Analysis](hausa/sentiment_analysis.md) ·
-  [Hate Speech](hausa/hate_speech.md) ·
-  [Language Modeling](hausa/language_modeling.md) ·
-  [Common Sense](hausa/common_sense.md) ·
-  [Multimodal](hausa/multimodal.md)
+### Contributing
 
-- **Swahili:**  
-  [Machine Translation](swahili/machine_translation.md) ·
-  [Sentiment Analysis](swahili/sentiment_analysis.md) ·
-  [Hate Speech](swahili/hate_speech.md) ·
-  [Language Modeling](swahili/language_modeling.md) ·
-  [Common Sense](swahili/common_sense.md) ·
-  [Multimodal](swahili/multimodal.md)
+#### Guidelines
 
-- **Yoruba:**  
-  [Machine Translation](yoruba/machine_translation.md) ·
-  [Sentiment Analysis](yoruba/sentiment_analysis.md) ·
-  [Hate Speech](yoruba/hate_speech.md) ·
-  [Language Modeling](yoruba/language_modeling.md) ·
-  [Common Sense](yoruba/common_sense.md) ·
-  [Multimodal](yoruba/multimodal.md)
+- **Results.** Prefer results reported in peer-reviewed publications; high-impact preprints are acceptable if methods and evaluation are clear.
+- **Datasets.** Add datasets that have seen evaluation in at least one paper beyond the introduction paper.
+- **Code.** Link to implementations where available. If a `Code` column is present, mark **Official** implementations explicitly and use a regular link for unofficial ones.
 
-## Result Table Schema (All Tasks)
+These guidelines mirror the proven process in similar SOTA repositories, adapted to African-language tasks. :contentReference[oaicite:3]{index=3}
 
-Each task page uses the same schema:
+#### Adding a new result
 
-| Rank | Model / System | Dataset (Split) | Metric | Score | Paper (Venue/Year) | Code | Date |
-|:---:|---|---|---|---:|---|---|:--:|
+1. Open the Markdown file for the **language + task** (e.g., `hausa/machine_translation.md`).
+2. Insert a new row following the canonical table schema on that page.
+3. Keep the table sorted (best score at the top; invert for lower-is-better metrics like perplexity or WER).
+4. Use **YYYY-MM-DD** for the Date column and include a venue tag (e.g., `ACL 2025`).
+5. Preview your change, then open a pull request.
 
-- **Metric** must match the task’s primary reporting metric (see each page’s *Metrics* note).  
-- **Dataset (Split)** must specify the **test** split used (or test server/hidden).  
-- **Date** = date when the result was reported (YYYY-MM-DD).
+#### Adding a new dataset or task
 
-> ⚠️ **Reproducibility:** Prefer peer-reviewed, clearly specified settings (pretraining, prompts, decoding, seeds). Add notes as needed.
+1. If the task is **new**, create a new task file under each relevant language directory and link it in this **Table of contents**.
+2. Briefly describe the dataset/task, provide references, define the evaluation setting and **primary metric**.
+3. Include an example (if space allows) and a download link (if available).
+4. Add a results table with **at least two** entries (including the SOTA), using the standard schema.
+5. Submit a pull request.
 
-## How to Contribute
+---
 
-See [CONTRIBUTING.md](CONTRIBUTING.md) for:
-- adding a new result,
-- adding a new task or language,
-- formatting & citation style,
-- ethical reporting guidelines.
+### Wish list
 
-## Citation
+These tasks/datasets are especially valuable to add for African languages:
 
-If you use this repository, please cite it:
+- Named entity recognition (NER)
+- Part-of-speech tagging (POS)
+- Question answering (extractive & open-domain)
+- Summarization (news, social, conversation)
+- Natural language inference (NLI)
+- Semantic textual similarity (STS)
+- Dialogue and intent/slot (task-oriented, open-domain)
+- Discourse parsing
+- Keyphrase extraction
+- Topic classification beyond sentiment/hate
+- Speech tasks beyond ASR/TTS (e.g., keyword spotting)
 
-```bibtex
-@misc{africanlp_progress_2025,
-  title = {AfricanNLP-progress: Community Leaderboards for African Languages},
-  author = {Muhammad, Shamsuddeen Hassan and Contributors},
-  year = {2025},
-  url = {https://github.com/your-org/AfricanNLP-progress}
-}
+(Contributors: feel free to open an issue proposing additional priorities.)
+
+---
+
+### Exporting into a structured format
+
+We plan to provide a script to export all task tables into a **machine-readable JSON** (tasks, datasets, metrics, and SOTA entries) to facilitate dashboards and meta-analysis. See `structured/README.md` (coming soon) for instructions based on a workflow similar to related projects. :contentReference[oaicite:4]{index=4}
+
+---
+
+### Instructions for building the site locally
+
+If you’d like to serve these pages via GitHub Pages (Jekyll):
+
+1. Ensure Ruby and Bundler are installed.
+2. From the repo root: `bundle install` then `bundle exec jekyll serve`.
+3. Open `http://localhost:4000/` and verify internal links render as expected.
+
+For a reference workflow and configuration layout, see the analogous instructions in the original SOTA repository. :contentReference[oaicite:5]{index=5}
+
+---
+
+## About
+
+**AfricanNLP-progress** is a community-maintained index of datasets and SOTA results for African languages, starting with Hausa, Swahili, and Yoruba. It is inspired by and structurally aligned with **NLP-progress**. We thank that community for the template and the broader vision behind tracking field progress. :contentReference[oaicite:6]{index=6}
+
+**License:** See `LICENSE` (CC BY 4.0 or as set by this repository).
+
