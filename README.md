@@ -3,8 +3,8 @@
 ## Table of contents
 
 ### Hausa
-  [Machine translation](hausa/machine_translation.md) /| [Sentiment analysis](hausa/sentiment_analysis.md) /| [Hate/abusive speech](hausa/hate_speech.md)
-   /| [Language modeling](hausa/language_modeling.md) /|  [Common sense](hausa/common_sense.md) /|  [Multimodal](hausa/multimodal.md)
+  [Machine translation](hausa/machine_translation.md) | [Sentiment analysis](hausa/sentiment_analysis.md) | [Hate/abusive speech](hausa/hate_speech.md)
+  | [Language modeling](hausa/language_modeling.md) | [Common sense](hausa/common_sense.md) | [Multimodal](hausa/multimodal.md)
 
 ### Swahili
   * [Machine translation](swahili/machine_translation.md)
