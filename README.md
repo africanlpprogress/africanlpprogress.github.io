@@ -3,8 +3,6 @@
 ## Table of contents
 
 ### Hausa
-
-### Hausa
   [Machine translation](hausa/machine_translation.md) | [Sentiment analysis](hausa/sentiment_analysis.md) | [Hate/abusive speech](hausa/hate_speech.md)
   | [Language modeling](hausa/language_modeling.md) | [Common sense](hausa/common_sense.md) | [Multimodal](hausa/multimodal.md)
 
@@ -16,9 +14,6 @@
   [Machine translation](yoruba/machine_translation.md) | [Sentiment analysis](yoruba/sentiment_analysis.md) | [Hate/abusive speech](yoruba/hate_speech.md)
   | [Language modeling](yoruba/language_modeling.md) | [Common sense](yoruba/common_sense.md) | [Multimodal](yoruba/multimodal.md)
 
-
-
----
 
 This document tracks progress in **African NLP** by summarizing benchmark datasets and **state-of-the-art (SOTA)** results for common tasks across Hausa, Swahili, and Yoruba. As with similar efforts, we aim to provide a concise, task-centric entry point and point readers to official leaderboards when those exist and are actively maintained. :contentReference[oaicite:1]{index=1}
 
