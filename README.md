@@ -6,7 +6,6 @@
 [![Made with ❤️ by the community](https://img.shields.io/badge/made%20with-%E2%9D%A4%EF%B8%8F%20by%20the%20community-red.svg)](#contributing)
 
 A community-maintained index of datasets and state-of-the-art results in **African languages**.  
-Initial languages: **Hausa (hau)** · **Swahili (swa)** · **Yorùbá (yor)**.  
 Pull requests welcome—see [CONTRIBUTING.md](CONTRIBUTING.md).
 
 > Prior art: This project is inspired by the excellent **NLP-progress** initiative and follows a similar task-per-page structure with language-scoped leaderboards.
