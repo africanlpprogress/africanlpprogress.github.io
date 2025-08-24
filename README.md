@@ -1,79 +1,82 @@
-# African NLP Progress (africanlpprogress)
+# AfricanNLP-progress 🌍
 
-[![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](CONTRIBUTING.md)
-[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
-![Status](https://img.shields.io/badge/status-living--document-1)
-[![Made with ❤️ by the community](https://img.shields.io/badge/made%20with-%E2%9D%A4%EF%B8%8F%20by%20the%20community-red.svg)](#contributing)
+[![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](#how-to-contribute)
+[![License: CC BY 4.0](https://img.shields.io/badge/License-CC%20BY%204.0-blue.svg)](LICENSE)
+[![Focus: AfricaNLP](https://img.shields.io/badge/Focus-AfricaNLP-informational.svg)](#scope)
+[![Last Updated](https://img.shields.io/badge/last--updated-2025--08--24-black.svg)](#)
 
-A community-maintained index of datasets and state-of-the-art results in **African languages**.  
-Pull requests welcome—see [CONTRIBUTING.md](CONTRIBUTING.md).
+> A community-maintained, task-oriented leaderboard of results for **African languages**, starting with **Hausa (ha)**, **Swahili (sw)**, and **Yoruba (yo)**.  
+> Inspired by the excellent [NLP-progress] and aligned with ACL/EMNLP reporting norms.
 
-> Prior art: This project is inspired by the excellent **NLP-progress** initiative and follows a similar task-per-page structure with language-scoped leaderboards.
-
----
-
-## 📚 Table of Contents
-
-- [Scope](#scope)
-- [Languages & Tasks](#languages--tasks)
-  - [Hausa](hausa/README.md): [Machine Translation](hausa/machine_translation.md) · [Sentiment Analysis](hausa/sentiment_analysis.md) · [Hate Speech](hausa/hate_speech.md)
-  - [Swahili](swahili/README.md): [Machine Translation](swahili/machine_translation.md) · [Sentiment Analysis](swahili/sentiment_analysis.md) · [Hate Speech](swahili/hate_speech.md)
-  - [Yorùbá](yoruba/README.md): [Machine Translation](yoruba/machine_translation.md) · [Sentiment Analysis](yoruba/sentiment_analysis.md) · [Hate Speech](yoruba/hate_speech.md)
-- [How to Contribute](#how-to-contribute)
-- [Citing this Repository](#citing-this-repository)
-- [License](#license)
-- [Acknowledgements](#acknowledgements)
-
----
+<p align="center">
+  <img src="assets/banner.png" alt="AfricanNLP-progress" width="85%"/>
+</p>
 
 ## Scope
 
-This repository curates **datasets**, **metrics**, and **leaderboards** for core NLP tasks in African languages. Each page lists:
-1) Task definition and recommended metrics  
-2) Public datasets with links  
-3) A leaderboard of published (or reproducible) results  
-4) Reproducibility pointers (code, configs, seeds where available)
+We track paper-reported results for core NLP and speech tasks with **clear dataset splits and metrics**. Initial tasks:
 
-> Speech tasks (e.g., ASR) are out-of-scope in the initial release but can be added later. For ASR tracking, see the community tracker **WER are we**.
+- **Core NLP:** Machine Translation, Sentiment Analysis, Hate Speech
+- **Additional (mirroring NLP-progress categories):** Language Modeling, Common Sense Reasoning, Multimodal (e.g., ASR/TTS/Vision+Language)
 
----
+> Languages covered (v0.1): **Hausa (ha), Swahili (sw), Yoruba (yo)**.  
+> We welcome PRs adding more African languages and tasks.
 
-## Languages & Tasks
+## Quick Links
 
-### Hausa (hau)
-- **Machine Translation** → [hausa/machine_translation.md](hausa/machine_translation.md)  
-- **Sentiment Analysis** → [hausa/sentiment_analysis.md](hausa/sentiment_analysis.md)  
-- **Hate Speech** → [hausa/hate_speech.md](hausa/hate_speech.md)
+- **Hausa:**  
+  [Machine Translation](hausa/machine_translation.md) ·
+  [Sentiment Analysis](hausa/sentiment_analysis.md) ·
+  [Hate Speech](hausa/hate_speech.md) ·
+  [Language Modeling](hausa/language_modeling.md) ·
+  [Common Sense](hausa/common_sense.md) ·
+  [Multimodal](hausa/multimodal.md)
 
-### Swahili (swa)
-- **Machine Translation** → [swahili/machine_translation.md](swahili/machine_translation.md)  
-- **Sentiment Analysis** → [swahili/sentiment_analysis.md](swahili/sentiment_analysis.md)  
-- **Hate Speech** → [swahili/hate_speech.md](swahili/hate_speech.md)
+- **Swahili:**  
+  [Machine Translation](swahili/machine_translation.md) ·
+  [Sentiment Analysis](swahili/sentiment_analysis.md) ·
+  [Hate Speech](swahili/hate_speech.md) ·
+  [Language Modeling](swahili/language_modeling.md) ·
+  [Common Sense](swahili/common_sense.md) ·
+  [Multimodal](swahili/multimodal.md)
 
-### Yorùbá (yor)
-- **Machine Translation** → [yoruba/machine_translation.md](yoruba/machine_translation.md)  
-- **Sentiment Analysis** → [yoruba/sentiment_analysis.md](yoruba/sentiment_analysis.md)  
-- **Hate Speech** → [yoruba/hate_speech.md](yoruba/hate_speech.md)
+- **Yoruba:**  
+  [Machine Translation](yoruba/machine_translation.md) ·
+  [Sentiment Analysis](yoruba/sentiment_analysis.md) ·
+  [Hate Speech](yoruba/hate_speech.md) ·
+  [Language Modeling](yoruba/language_modeling.md) ·
+  [Common Sense](yoruba/common_sense.md) ·
+  [Multimodal](yoruba/multimodal.md)
 
----
+## Result Table Schema (All Tasks)
+
+Each task page uses the same schema:
+
+| Rank | Model / System | Dataset (Split) | Metric | Score | Paper (Venue/Year) | Code | Date |
+|:---:|---|---|---|---:|---|---|:--:|
+
+- **Metric** must match the task’s primary reporting metric (see each page’s *Metrics* note).  
+- **Dataset (Split)** must specify the **test** split used (or test server/hidden).  
+- **Date** = date when the result was reported (YYYY-MM-DD).
+
+> ⚠️ **Reproducibility:** Prefer peer-reviewed, clearly specified settings (pretraining, prompts, decoding, seeds). Add notes as needed.
 
 ## How to Contribute
 
-- Add a result by editing the appropriate `<language>/<task>.md` file and inserting a new row under the correct dataset section.
-- Each row **must** include: *Dataset*, *Split/Test set*, *Metric*, *Score*, *Model*, *Paper*, *Code*, *Year*.  
-- Follow the exact table column order and formatting in [CONTRIBUTING.md](CONTRIBUTING.md).
+See [CONTRIBUTING.md](CONTRIBUTING.md) for:
+- adding a new result,
+- adding a new task or language,
+- formatting & citation style,
+- ethical reporting guidelines.
 
----
+## Citation
 
-## Citing this Repository
-
-If you use or extend this index, please cite:
+If you use this repository, please cite it:
 
 ```bibtex
-@misc{africanlpprogress2025,
-  title        = {African NLP Progress (africanlpprogress)},
-  author       = {Community, African NLP},
-  year         = {2025},
-  howpublished = {\url{https://github.com/<your-org>/africanlpprogress}},
-  note         = {A community-maintained index of datasets and results for African languages}
+@misc{africanlp_progress_2025,
+  title = {AfricanNLP-progress: Community Leaderboards for African Languages},
+  author = {Muhammad, Shamsuddeen Hassan and Contributors},
+  year = {2025},
+  url = {https://github.com/your-org/AfricanNLP-progress}
 }
