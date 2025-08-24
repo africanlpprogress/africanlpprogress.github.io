@@ -3,24 +3,20 @@
 ## Table of contents
 
 ### Hausa
+
+### Hausa
   [Machine translation](hausa/machine_translation.md) | [Sentiment analysis](hausa/sentiment_analysis.md) | [Hate/abusive speech](hausa/hate_speech.md)
   | [Language modeling](hausa/language_modeling.md) | [Common sense](hausa/common_sense.md) | [Multimodal](hausa/multimodal.md)
 
 ### Swahili
-  * [Machine translation](swahili/machine_translation.md)
-  * [Sentiment analysis](swahili/sentiment_analysis.md)
-  * [Hate/abusive speech](swahili/hate_speech.md)
-  * [Language modeling](swahili/language_modeling.md)
-  * [Common sense](swahili/common_sense.md)
-  * [Multimodal](swahili/multimodal.md)
+  [Machine translation](swahili/machine_translation.md) | [Sentiment analysis](swahili/sentiment_analysis.md) | [Hate/abusive speech](swahili/hate_speech.md)
+  | [Language modeling](swahili/language_modeling.md) | [Common sense](swahili/common_sense.md) | [Multimodal](swahili/multimodal.md)
 
 ### Yoruba
-  * [Machine translation](yoruba/machine_translation.md)
-  * [Sentiment analysis](yoruba/sentiment_analysis.md)
-  * [Hate/abusive speech](yoruba/hate_speech.md)
-  * [Language modeling](yoruba/language_modeling.md)
-  * [Common sense](yoruba/common_sense.md)
-  * [Multimodal](yoruba/multimodal.md)
+  [Machine translation](yoruba/machine_translation.md) | [Sentiment analysis](yoruba/sentiment_analysis.md) | [Hate/abusive speech](yoruba/hate_speech.md)
+  | [Language modeling](yoruba/language_modeling.md) | [Common sense](yoruba/common_sense.md) | [Multimodal](yoruba/multimodal.md)
+
+
 
 ---
 
