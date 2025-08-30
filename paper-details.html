@@ -1,0 +1,252 @@
+<!DOCTYPE HTML>
+<html>
+	<head>
+		<title>African NLP Research Explorer - Paper Details</title>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.2/papaparse.min.js"></script>
+		<link rel="stylesheet" href="assets/css/custom.css" />	
+	</head>
+	<body class="single is-preload">
+
+		<!-- Header -->
+		<header id="header">
+			<div class="header-content">
+				<div class="header-top">
+					<h1>
+						<a href="index.html" class="desktop-title">African NLP Research Explorer</a>
+						<a href="index.html" class="mobile-title">African NLP Research</a>
+					</h1>
+				</div>
+				<div class="breadcrumb">
+					<a href="index.html">Home</a> > Paper Details
+				</div>
+			</div>
+		</header>
+
+		<!-- Wrapper -->
+		<div id="wrapper">
+			<!-- Main -->
+			<div id="main">
+				<div id="paperContent" class="loading">
+					<h3>Loading paper details...</h3>
+					<p>Please wait while we fetch the paper information.</p>
+				</div>
+			</div>
+		</div>
+
+		<script>
+			let allPapersData = [];
+
+			document.addEventListener('DOMContentLoaded', function() {
+				loadPaperDetails();
+			});
+
+			function loadPaperDetails() {
+				// Get paper ID from URL parameters
+				const urlParams = new URLSearchParams(window.location.search);
+				const paperId = urlParams.get('id');
+				const paperTitle = urlParams.get('title');
+
+				if (!paperId && !paperTitle) {
+					showError('No paper specified', 'Please provide a paper ID or title in the URL parameters.');
+					return;
+				}
+
+				// Load the papers data
+				fetch('assets/data/papers.tsv')
+					.then(response => {
+						if (!response.ok) {
+							throw new Error('Could not load papers.tsv');
+						}
+						return response.text();
+					})
+					.then(tsv => {
+						Papa.parse(tsv, {
+							header: true,
+							delimiter: '\t',
+							skipEmptyLines: true,
+							complete: function(results) {
+								allPapersData = results.data;
+								findAndDisplayPaper(paperId, paperTitle);
+							}
+						});
+					})
+					.catch(error => {
+						console.error('Error loading data:', error);
+						showError('Error loading data', 'Could not load the papers database. Please try again later.');
+					});
+			}
+
+			function findAndDisplayPaper(paperId, paperTitle) {
+				let paper = null;
+
+				// First try to find by ID
+				if (paperId) {
+					paper = allPapersData.find(p => p.id === paperId);
+				}
+
+				// If not found and we have a title, try to find by title
+				if (!paper && paperTitle) {
+					const decodedTitle = decodeURIComponent(paperTitle);
+					paper = allPapersData.find(p => p.title === decodedTitle);
+				}
+
+				// If still not found, try a more flexible title match
+				if (!paper && paperTitle) {
+					const decodedTitle = decodeURIComponent(paperTitle).toLowerCase();
+					paper = allPapersData.find(p => p.title && p.title.toLowerCase() === decodedTitle);
+				}
+
+				if (paper) {
+					displayPaper(paper);
+				} else {
+					showError('Paper not found', 'The requested paper could not be found in the database.');
+				}
+			}
+
+			function displayPaper(paper) {
+				// Process authors
+				let authorsDisplay = 'Unknown Authors';
+				if (paper.authors) {
+					let authors = paper.authors.split(/ and |, /).map(a => a.trim()).filter(a => a);
+					authorsDisplay = authors.join(', ');
+				}
+
+				// Process institutions
+				let institutionsDisplay = 'Unknown Institution';
+				if (paper.author_institutions) {
+					institutionsDisplay = paper.author_institutions;
+				}
+
+				// Process topics and tasks
+				const topics = paper.nlp_topics ? 
+					paper.nlp_topics.split(',').map(t => t.trim().replace(/[\[\]']/g, '')).filter(t => t) : [];
+				const tasks = paper.nlp_tasks ? 
+					paper.nlp_tasks.split(',').map(t => t.trim().replace(/[\[\]']/g, '')).filter(t => t) : [];
+				const languages = paper.matched_keywords ? 
+					paper.matched_keywords.split(',').map(t => t.trim()).filter(t => t) : [];
+
+				// Create the paper detail HTML
+				const paperHTML = `
+					<article class="paper-detail">
+						<header class="paper-header">
+							<div class="title">
+								<h2><a href="${paper.url}" target="_blank">${paper.title || 'Untitled Paper'}</a></h2>
+							</div>
+							<div class="paper-meta">
+								<div class="meta-row">
+									<span class="meta-label">Published:</span>
+									<span class="meta-value">${paper.year || 'Unknown Year'}</span>
+								</div>
+								${paper.conference ? `
+								<div class="meta-row">
+									<span class="meta-label">Conference:</span>
+									<span class="meta-value">${paper.conference}</span>
+								</div>
+								` : ''}
+								${paper.id ? `
+								<div class="meta-row">
+									<span class="meta-label">Paper ID:</span>
+									<span class="meta-value">${paper.id}</span>
+								</div>
+								` : ''}
+							</div>
+						</header>
+
+						<div class="paper-authors">
+							<strong>Authors:</strong><br>
+							${authorsDisplay}
+						</div>
+
+						<div class="paper-institutions">
+							<strong>Affiliations:</strong><br>
+							${institutionsDisplay}
+						</div>
+
+						${paper.abstract ? `
+						<div class="paper-abstract">
+							<h3>Abstract</h3>
+							<p>${paper.abstract}</p>
+						</div>
+						` : ''}
+
+						${(topics.length > 0 || tasks.length > 0 || languages.length > 0) ? `
+						<div class="paper-tags">
+							<h3>Research Areas & Keywords</h3>
+							
+							${topics.length > 0 ? `
+							<div class="tags-section">
+								<h4>Topics:</h4>
+								<div class="tags">
+									${topics.map(topic => `<span class="tag">${topic}</span>`).join(' | ')}
+								</div>
+							</div>
+							` : ''}
+							
+							${tasks.length > 0 ? `
+							<div class="tags-section">
+								<h4>NLP Tasks:</h4>
+								<div class="tags">
+									${tasks.map(task => `<span class="tag task">${task}</span>`).join(' | ')}
+								</div>
+							</div>
+							` : ''}
+							
+							${languages.length > 0 ? `
+							<div class="tags-section">
+								<h4>Languages/Regions:</h4>
+								<div class="tags">
+									${languages.map(lang => `<span class="tag language">${lang}</span>`).join(' | ')}
+								</div>
+							</div>
+							` : ''}
+						</div>
+						` : ''}
+					</article>
+				`;
+
+				document.getElementById('paperContent').innerHTML = paperHTML;
+
+				// Update page title
+				document.title = `${paper.title || 'Paper Details'} - African NLP Research Explorer`;
+
+				// Update breadcrumb
+				const breadcrumb = document.querySelector('.breadcrumb');
+				if (breadcrumb) {
+					breadcrumb.innerHTML = `
+						<a href="index.html">Home</a> > 
+						<span>${(paper.title && paper.title.length > 50) ? paper.title.substring(0, 40) + '...' : (paper.title || 'Paper Details')}</span>
+					`;
+				}
+			}
+
+			function showError(title, message) {
+				const errorHTML = `
+					<div class="error">
+						<h3>${title}</h3>
+						<p>${message}</p>
+						<div class="paper-actions" style="margin-top: 2em;">
+							<button onclick="window.history.back()" class="back-button">← Back to Explorer</button>
+						</div>
+					</div>
+				`;
+				document.getElementById('paperContent').innerHTML = errorHTML;
+			}
+
+			// Add functionality to generate paper URLs
+			function generatePaperUrl(paper) {
+				const baseUrl = window.location.origin + window.location.pathname.replace(/\/[^\/]*$/, '/paper-detail.html');
+				const params = new URLSearchParams();
+				
+				if (paper.id) {
+					params.append('id', paper.id);
+				} else if (paper.title) {
+					params.append('title', encodeURIComponent(paper.title));
+				}
+				
+				return `${baseUrl}?${params.toString()}`;
+			}
+		</script>
+	</body>
+</html>

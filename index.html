@@ -1,0 +1,1347 @@
+<!DOCTYPE HTML>
+<html>
+	<head>
+		<title>African NLP Research Explorer</title>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.2/papaparse.min.js"></script>
+		<link rel="stylesheet" href="assets/css/custom.css" />	
+	</head>
+	<body>
+		<!-- Sidebar Overlay -->
+		<div class="sidebar-overlay" onclick="toggleSidebar()"></div>
+
+		<!-- Header -->
+		<header id="header">
+			<div class="header-content">
+				<div class="header-top">
+					<h1>
+						<a href="#" class="desktop-title">African NLP Research Explorer</a>
+						<a href="#" class="mobile-title">African NLP Research</a>
+					</h1>
+					<div class="nav desktop-nav">
+						<a href="#" onclick="goToExplorer()" class="active">Explorer</a>
+						<a href="#" onclick="goToVisualizations()">Visualizations</a>
+					</div>
+				</div>
+				<div class="stats">
+					<span id="totalPapers">0</span> Papers | <span id="filteredPapers">0</span> Showing
+				</div>
+			</div>
+		</header>
+
+		<!-- Mobile Navigation -->
+		<nav class="mobile-nav">
+			<a href="#" onclick="goToExplorer()" class="active">Explorer</a>
+			<a href="#" onclick="goToVisualizations()">Visualizations</a>
+		</nav>
+
+		<!-- Mobile Sidebar Toggle -->
+		<button class="sidebar-toggle" onclick="toggleSidebar()">
+			<span id="toggleText">Filters</span>
+		</button>
+
+		<!-- Wrapper -->
+		<div id="wrapper">
+			<!-- Sidebar -->
+			<section id="sidebar">
+				<!-- Browse by Title -->
+				<section class="filters">
+					<h3 style="font-size: 0.7em;">Browse by Title</h3>
+					<div class="pagination-container" style="margin: 0; text-align: left;">
+						<div class="pagination-tabs" id="paginationTabs" style="display: flex; flex-wrap: wrap; gap: 0.5em;"></div>
+					</div>
+				</section>
+
+				<!-- Filters -->
+				<section class="filters">
+					<div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.2em;">
+						<h3 style="margin: 0; font-size: 0.7em;">Filters</h3>
+						<button class="clear-filters-btn" onclick="clearAllFilters()" style="margin: 0; width: auto; padding: 0.25em 0.6em; font-size: 0.5em;">Clear All</button>
+					</div>
+					
+					<div class="filter-group">
+						<label for="searchInput">Search</label>
+						<input type="text" id="searchInput" placeholder="Search titles, abstracts, authors..." />
+					</div>
+					
+					<div class="filter-group">
+						<label for="yearFilter">Year</label>
+						<select id="yearFilter">
+							<option value="">All Years</option>
+						</select>
+					</div>
+					
+					<div class="filter-group">
+						<label for="languageFilter">Language/Region</label>
+						<select id="languageFilter">
+							<option value="">All Languages</option>
+						</select>
+					</div>
+					
+					<div class="filter-group">
+						<label for="taskFilter">NLP Task</label>
+						<select id="taskFilter">
+							<option value="">All Tasks</option>
+						</select>
+					</div>
+					
+					<div class="filter-group">
+						<label for="topicFilter">Topic</label>
+						<select id="topicFilter">
+							<option value="">All Topics</option>
+						</select>
+					</div>
+				</section>
+			</section>
+
+			<!-- Main -->
+			<div id="main">
+				<div id="explorer-content">
+					<div class="stats-grid">
+						<div class="stat-card">
+							<span class="stat-number" id="mainStatPapers">0</span>
+							<span class="stat-label">Papers</span>
+						</div>
+						<div class="stat-card">
+							<span class="stat-number" id="mainStatAuthors">0</span>
+							<span class="stat-label">Authors</span>
+						</div>
+						<div class="stat-card">
+							<span class="stat-number" id="statYears">0</span>
+							<span class="stat-label">Years</span>
+						</div>
+						<div class="stat-card">
+							<span class="stat-number" id="statLanguages">0</span>
+							<span class="stat-label">Languages</span>
+						</div>
+						<div class="stat-card">
+							<span class="stat-number" id="statTasks">0</span>
+							<span class="stat-label">NLP Tasks</span>
+						</div>
+						<div class="stat-card">
+							<span class="stat-number" id="avgPapersPerYearViz">-</span>
+							<span class="stat-label">Avg Papers/Year</span>
+						</div>
+					</div>
+
+					<div id="resultsContainer">
+						<div id="papersContainer">
+							<div class="no-results">
+								<h3>Welcome to African NLP Research Explorer</h3>
+								<p>Please upload your CSV/TSV file to begin exploring the research data.</p>
+							</div>
+						</div>
+						
+						<div class="pagination-container" style="text-align: center;">
+							<button class="show-more-btn" id="showMoreBtn" onclick="showMore()" style="display: none;">Show More</button>
+						</div>
+					</div>
+				</div>
+
+				<!-- Visualizations Section -->
+				<div id="visualizations" style="display: none;">
+					<!-- Charts Grid -->
+					<div class="chart-grid">
+						<!-- Publications by Year -->
+						<div class="chart-container">
+							<h3>Publications by Year</h3>
+							<div class="chart-wrapper">
+								<canvas id="yearChart" class="chart-canvas"></canvas>
+							</div>
+						</div>
+
+						<!-- Top Languages/Regions -->
+						<div class="chart-container">
+							<h3>Top Languages/Regions</h3>
+							<div class="chart-wrapper">
+								<canvas id="languageChart" class="chart-canvas"></canvas>
+							</div>
+						</div>
+
+						<!-- NLP Tasks Distribution -->
+						<div class="chart-container full-width">
+							<h3>NLP Tasks Distribution</h3>
+							<div class="chart-wrapper">
+								<canvas id="tasksChart" class="chart-canvas"></canvas>
+							</div>
+						</div>
+
+						<!-- Research Growth Trend -->
+						<div class="chart-container">
+							<h3>Research Growth Trend</h3>
+							<div class="chart-wrapper">
+								<canvas id="growthChart" class="chart-canvas"></canvas>
+							</div>
+						</div>
+
+						<!-- Institution Distribution -->
+						<div class="chart-container">
+							<h3>Top Research Institutions</h3>
+							<div class="chart-wrapper">
+								<canvas id="institutionChart" class="chart-canvas"></canvas>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<script>
+			let researchData = [];
+			let filteredData = [];
+			let paginatedData = {};
+			let currentPage = 'A';
+			let itemsPerPage = 5;
+			let showingPerPage = {};
+
+			document.addEventListener('DOMContentLoaded', function() {
+				const searchInput = document.getElementById('searchInput');
+				const yearFilter = document.getElementById('yearFilter');
+				const languageFilter = document.getElementById('languageFilter');
+				const taskFilter = document.getElementById('taskFilter');
+				const topicFilter = document.getElementById('topicFilter');
+				const resultsContainer = document.getElementById('resultsContainer');
+				const papersContainer = document.getElementById('papersContainer');
+
+				searchInput.addEventListener('input', applyFilters);
+				yearFilter.addEventListener('change', applyFilters);
+				languageFilter.addEventListener('change', applyFilters);
+				taskFilter.addEventListener('change', applyFilters);
+				topicFilter.addEventListener('change', applyFilters);
+
+				loadDataFromFile();
+			});
+
+			function loadDataFromFile() {
+				fetch('assets/data/papers.tsv')
+					.then(response => {
+						if (!response.ok) {
+							throw new Error('Could not load papers.tsv');
+						}
+						return response.text();
+					})
+					.then(tsv => {
+						Papa.parse(tsv, {
+							header: true,
+							delimiter: '\t',
+							skipEmptyLines: true,
+							complete: function(results) {
+								researchData = results.data;
+								initializeFilters();
+								applyFilters();
+								updateStatistics();
+							}
+						});
+					})
+					.catch(error => {
+						console.error('Could not auto-load data:', error);
+					});
+			}
+
+			function initializeFilters() {
+				const yearFilter = document.getElementById('yearFilter');
+				const languageFilter = document.getElementById('languageFilter');
+				const taskFilter = document.getElementById('taskFilter');
+				const topicFilter = document.getElementById('topicFilter');
+				
+				const filters = [yearFilter, languageFilter, taskFilter, topicFilter];
+				filters.forEach(filter => {
+					while (filter.children.length > 1) {
+						filter.removeChild(filter.lastChild);
+					}
+				});
+
+				const years = new Set();
+				const languages = new Set();
+				const tasks = new Set();
+				const topics = new Set();
+
+				researchData.forEach(paper => {
+					if (paper.year) years.add(paper.year);
+					
+					if (paper.matched_keywords) {
+						const keywords = paper.matched_keywords.split(',').map(k => k.trim());
+						keywords.forEach(keyword => languages.add(keyword));
+					}
+					
+					if (paper.nlp_tasks) {
+						const paperTasks = paper.nlp_tasks.split(',').map(t => t.trim().replace(/[\[\]']/g, ''));
+						paperTasks.forEach(task => tasks.add(task));
+					}
+					
+					if (paper.nlp_topics) {
+						const paperTopics = paper.nlp_topics.split(',').map(t => t.trim().replace(/[\[\]']/g, ''));
+						paperTopics.forEach(topic => topics.add(topic));
+					}
+				});
+
+				Array.from(years).sort().forEach(year => {
+					const option = document.createElement('option');
+					option.value = year;
+					option.textContent = year;
+					yearFilter.appendChild(option);
+				});
+
+				Array.from(languages).sort().forEach(lang => {
+					if (lang) {
+						const option = document.createElement('option');
+						option.value = lang;
+						option.textContent = lang;
+						languageFilter.appendChild(option);
+					}
+				});
+
+				Array.from(tasks).sort().forEach(task => {
+					if (task) {
+						const option = document.createElement('option');
+						option.value = task;
+						option.textContent = task;
+						taskFilter.appendChild(option);
+					}
+				});
+
+				Array.from(topics).sort().forEach(topic => {
+					if (topic) {
+						const option = document.createElement('option');
+						option.value = topic;
+						option.textContent = topic;
+						topicFilter.appendChild(option);
+					}
+				});
+			}
+
+			function applyFilters() {
+				if (researchData.length === 0) return;
+
+				const searchInput = document.getElementById('searchInput');
+				const yearFilter = document.getElementById('yearFilter');
+				const languageFilter = document.getElementById('languageFilter');
+				const taskFilter = document.getElementById('taskFilter');
+				const topicFilter = document.getElementById('topicFilter');
+
+				const searchTerm = searchInput.value.toLowerCase();
+				const selectedYear = yearFilter.value;
+				const selectedLanguage = languageFilter.value;
+				const selectedTask = taskFilter.value;
+				const selectedTopic = topicFilter.value;
+
+				filteredData = researchData.filter(paper => {
+					if (searchTerm && !searchInPaper(paper, searchTerm)) {
+						return false;
+					}
+
+					if (selectedYear && paper.year !== selectedYear) {
+						return false;
+					}
+
+					if (selectedLanguage && (!paper.matched_keywords || !paper.matched_keywords.includes(selectedLanguage))) {
+						return false;
+					}
+
+					if (selectedTask && (!paper.nlp_tasks || !paper.nlp_tasks.includes(selectedTask))) {
+						return false;
+					}
+
+					if (selectedTopic && (!paper.nlp_topics || !paper.nlp_topics.includes(selectedTopic))) {
+						return false;
+					}
+
+					return true;
+				});
+
+				displayResults();
+				updateCounts();
+				updateFilteredStatistics();
+				updateVisualizationsWithFilters();
+			}
+
+			function searchInPaper(paper, searchTerm) {
+				const searchFields = ['title', 'abstract', 'authors', 'author_institutions'];
+				return searchFields.some(field => 
+					paper[field] && paper[field].toLowerCase().includes(searchTerm)
+				);
+			}
+
+			function displayResults() {
+				const papersContainer = document.getElementById('papersContainer');
+				
+				if (filteredData.length === 0) {
+					papersContainer.innerHTML = '<div class="no-results"><h3>No Results Found</h3><p>Try adjusting your search criteria.</p></div>';
+					document.getElementById('paginationTabs').innerHTML = '';
+					document.getElementById('showMoreBtn').style.display = 'none';
+					return;
+				}
+
+				// Group papers by first letter of title
+				paginatedData = {};
+				showingPerPage = {};
+				
+				filteredData.forEach(paper => {
+					const firstLetter = (paper.title || 'Unknown').charAt(0).toUpperCase();
+					if (!paginatedData[firstLetter]) {
+						paginatedData[firstLetter] = [];
+						showingPerPage[firstLetter] = itemsPerPage;
+					}
+					paginatedData[firstLetter].push(paper);
+				});
+
+				// Create pagination tabs
+				const tabs = Object.keys(paginatedData).sort((a, b) => {
+					const isANumber = !isNaN(a);
+					const isBNumber = !isNaN(b);
+
+					if (!isANumber && isBNumber) return -1;
+					if (isANumber && !isBNumber) return 1;
+
+					if (!isANumber && !isBNumber) return a.localeCompare(b);
+
+					return Number(a) - Number(b);
+				});
+
+				const tabsHTML = tabs.map(letter => 
+					`<div class="pagination-tab ${letter === currentPage ? 'active' : ''}" onclick="changePage('${letter}')">${letter}</div>`
+				).join('');
+				
+				document.getElementById('paginationTabs').innerHTML = tabsHTML;
+
+				if (!paginatedData[currentPage]) {
+					currentPage = tabs[0] || 'A';
+				}
+
+				displayCurrentPage();
+			}
+
+			function displayCurrentPage() {
+				const papersContainer = document.getElementById('papersContainer');
+				const showMoreBtn = document.getElementById('showMoreBtn');
+				
+				if (!paginatedData[currentPage]) {
+					papersContainer.innerHTML = '<div class="no-results"><h3>No Papers Found</h3></div>';
+					showMoreBtn.style.display = 'none';
+					return;
+				}
+
+				const currentPagePapers = paginatedData[currentPage];
+				const showingCount = Math.min(showingPerPage[currentPage], currentPagePapers.length);
+				const papersToShow = currentPagePapers.slice(0, showingCount);
+
+				const html = papersToShow.map(paper => createPaperCard(paper)).join('');
+				papersContainer.innerHTML = html;
+
+				if (showingCount < currentPagePapers.length) {
+					showMoreBtn.style.display = 'block';
+					showMoreBtn.textContent = `Show More (${currentPagePapers.length - showingCount} remaining)`;
+				} else {
+					showMoreBtn.style.display = 'none';
+				}
+			}
+
+			function changePage(letter) {
+				currentPage = letter;
+				
+				document.querySelectorAll('.pagination-tab').forEach(tab => {
+					tab.classList.remove('active');
+				});
+				const activeTab = document.querySelector(`.pagination-tab[onclick="changePage('${letter}')"]`);
+				if (activeTab) {
+					activeTab.classList.add('active');
+				}
+				
+				displayCurrentPage();
+			}
+
+			function showMore() {
+				if (paginatedData[currentPage]) {
+					showingPerPage[currentPage] += itemsPerPage;
+					displayCurrentPage();
+				}
+			}
+
+			function createPaperCard(paper) {
+				const topics = paper.nlp_topics ? paper.nlp_topics.split(',').map(t => t.trim().replace(/[\[\]']/g, '')).filter(t => t) : [];
+				const tasks = paper.nlp_tasks ? paper.nlp_tasks.split(',').map(t => t.trim().replace(/[\[\]']/g, '')).filter(t => t) : [];
+				const allTags = [...topics, ...tasks];
+				
+				let authorsDisplay = 'Unknown Authors';
+				if (paper.authors) {
+					let authors = paper.authors.split(/ and |, /).map(a => a.trim()).filter(a => a);
+					if (authors.length <= 10) {
+						authorsDisplay = authors.join(', ');
+					} else {
+						const topTenAuthors = authors.slice(0, 10);
+						authorsDisplay = topTenAuthors.join(', ') + ' et al.';
+					}
+				}
+
+				const paperId = paper.id || Math.random().toString(36).substr(2, 9);
+
+				// Generate link to paper details page
+				const detailsLink = paper.id ? 
+					`paper-details.html?id=${encodeURIComponent(paper.id)}` : 
+					`paper-details.html?title=${encodeURIComponent(paper.title || 'Untitled')}`;
+
+				return `
+					<article class="research-card">
+						<header class="title">
+							<h3><a href="${detailsLink}">${paper.title || 'Untitled'}</a></h3>
+						</header>
+						<div class="meta">
+							${authorsDisplay} • ${paper.year || 'Unknown Year'}
+							<span class="affiliation-toggle" onclick="toggleAffiliation('${paperId}')">see affiliations</span>
+							<div id="affiliations-${paperId}" class="affiliations">
+								${paper.author_institutions || 'Unknown Institution'}
+							</div>
+						</div>
+						<div class="abstract">
+							${paper.abstract ? (paper.abstract.substring(0, 300) + (paper.abstract.length > 300 ? '...' : '')) : 'No abstract available.'}
+						</div>
+						<div class="tags">
+							${allTags.map(tag => `<span class="tag">${tag}</span>`).join('')}
+						</div>
+					</article>
+				`;
+			}
+
+			function updateStatistics() {
+				const totalPapers = researchData.length;
+				const uniqueYears = new Set(researchData.map(p => p.year).filter(y => y)).size;
+				const uniqueLanguages = new Set();
+				const uniqueTasks = new Set();
+				const uniqueAuthors = new Set();
+
+				researchData.forEach(paper => {
+					if (paper.matched_keywords) {
+						paper.matched_keywords.split(',').forEach(lang => uniqueLanguages.add(lang.trim()));
+					}
+					
+					if (paper.nlp_tasks) {
+						paper.nlp_tasks.split(',').forEach(task => uniqueTasks.add(task.trim().replace(/[\[\]']/g, '')));
+					}
+					
+					if (paper.authors) {
+						paper.authors.split(/ and |, /).forEach(author => uniqueAuthors.add(author.trim()));
+					}
+				});
+
+				document.getElementById('mainStatPapers').textContent = totalPapers;
+				document.getElementById('mainStatAuthors').textContent = uniqueAuthors.size;
+				document.getElementById('statYears').textContent = uniqueYears;
+				document.getElementById('statLanguages').textContent = uniqueLanguages.size;
+				document.getElementById('statTasks').textContent = uniqueTasks.size;
+				document.getElementById('totalPapers').textContent = totalPapers;
+
+				// Calculate average papers per year
+				const years = Object.keys(researchData.reduce((acc, paper) => {
+					if (paper.year) acc[paper.year] = true;
+					return acc;
+				}, {}));
+
+				const avgPapersPerYear = years.length > 0 ? Math.round(totalPapers / years.length * 10) / 10 : 0;
+				document.getElementById('avgPapersPerYearViz').textContent = avgPapersPerYear;
+				
+				updateFilteredStatistics();
+				
+				if (document.getElementById('visualizations').style.display === 'block') {
+					initializeVisualizations();
+				}
+			}
+
+			function updateFilteredStatistics() {
+				const filteredAuthors = new Set();
+
+				filteredData.forEach(paper => {
+					if (paper.authors) {
+						paper.authors.split(/ and |, /).forEach(author => filteredAuthors.add(author.trim()));
+					}
+				});
+
+				document.getElementById('mainStatPapers').textContent = filteredData.length;
+				document.getElementById('mainStatAuthors').textContent = filteredAuthors.size;
+			}
+
+			function updateCounts() {
+				document.getElementById('filteredPapers').textContent = filteredData.length;
+			}
+
+			function toggleAffiliation(paperId) {
+				const affiliationsDiv = document.getElementById(`affiliations-${paperId}`);
+				const toggleLink = affiliationsDiv.previousElementSibling;
+				
+				if (affiliationsDiv.style.display === 'none' || affiliationsDiv.style.display === '') {
+					affiliationsDiv.style.display = 'block';
+					toggleLink.textContent = 'hide affiliations';
+				} else {
+					affiliationsDiv.style.display = 'none';
+					toggleLink.textContent = 'see affiliations';
+				}
+			}
+
+			function clearAllFilters() {
+				document.getElementById('searchInput').value = '';
+				document.getElementById('yearFilter').value = '';
+				document.getElementById('languageFilter').value = '';
+				document.getElementById('taskFilter').value = '';
+				document.getElementById('topicFilter').value = '';
+				
+				currentPage = 'A';
+				
+				applyFilters();
+			}
+
+			function toggleSidebar() {
+				const sidebar = document.getElementById('sidebar');
+				const overlay = document.querySelector('.sidebar-overlay');
+				const toggleText = document.getElementById('toggleText');
+				
+				if (sidebar.classList.contains('open')) {
+					sidebar.classList.remove('open');
+					overlay.classList.remove('active');
+					toggleText.textContent = 'Filters';
+				} else {
+					sidebar.classList.add('open');
+					overlay.classList.add('active');
+					toggleText.textContent = 'Close';
+				}
+			}
+
+			// Visualization functionality
+			let visualizationCharts = {};
+			const chartColors = {
+				primary: '#2ebaae',
+				secondary: '#1ea59a',
+				accent: '#3c3b3b',
+				light: '#f4f4f4',
+				gray: '#646464'
+			};
+
+			function goToExplorer() {
+				document.getElementById('explorer-content').style.display = 'block';
+				document.getElementById('visualizations').style.display = 'none';
+				
+				// Update desktop nav
+				const desktopExplorer = document.querySelector('.desktop-nav a[onclick="goToExplorer()"]');
+				const desktopViz = document.querySelector('.desktop-nav a[onclick="goToVisualizations()"]');
+				if (desktopExplorer && desktopViz) {
+					desktopExplorer.classList.add('active');
+					desktopViz.classList.remove('active');
+				}
+				
+				// Update mobile nav
+				const mobileExplorer = document.querySelector('.mobile-nav a[onclick="goToExplorer()"]');
+				const mobileViz = document.querySelector('.mobile-nav a[onclick="goToVisualizations()"]');
+				if (mobileExplorer && mobileViz) {
+					mobileExplorer.classList.add('active');
+					mobileViz.classList.remove('active');
+				}
+			}
+
+			function goToVisualizations() {
+				document.getElementById('explorer-content').style.display = 'none';
+				document.getElementById('visualizations').style.display = 'block';
+				
+				// Update desktop nav
+				const desktopExplorer = document.querySelector('.desktop-nav a[onclick="goToExplorer()"]');
+				const desktopViz = document.querySelector('.desktop-nav a[onclick="goToVisualizations()"]');
+				if (desktopExplorer && desktopViz) {
+					desktopExplorer.classList.remove('active');
+					desktopViz.classList.add('active');
+				}
+				
+				// Update mobile nav
+				const mobileExplorer = document.querySelector('.mobile-nav a[onclick="goToExplorer()"]');
+				const mobileViz = document.querySelector('.mobile-nav a[onclick="goToVisualizations()"]');
+				if (mobileExplorer && mobileViz) {
+					mobileExplorer.classList.remove('active');
+					mobileViz.classList.add('active');
+				}
+				
+				// Initialize visualizations with current filtered data
+				if (researchData.length > 0) {
+					if (filteredData.length > 0) {
+						updateVisualizationsWithFilters();
+					} else {
+						initializeVisualizations();
+					}
+				}
+			}
+
+			function initializeVisualizations() {
+				if (researchData.length === 0) {
+					return;
+				}
+
+				createVisualizationYearChart();
+				createVisualizationLanguageChart();
+				createVisualizationTasksChart();
+				createVisualizationGrowthChart();
+				createVisualizationInstitutionChart();
+			}
+
+			function updateVisualizationsWithFilters() {
+				if (document.getElementById('visualizations').style.display === 'block' && filteredData.length > 0) {
+					createFilteredVisualizationYearChart();
+					createFilteredVisualizationLanguageChart();
+					createFilteredVisualizationTasksChart();
+					createFilteredVisualizationGrowthChart();
+					createFilteredVisualizationInstitutionChart();
+				}
+			}
+
+			// Original visualization functions (using full researchData)
+			function createVisualizationYearChart() {
+				const ctx = document.getElementById('yearChart').getContext('2d');
+				
+				if (visualizationCharts.yearChart) {
+					visualizationCharts.yearChart.destroy();
+				}
+				
+				const yearCounts = {};
+				researchData.forEach(paper => {
+					const year = paper.year;
+					if (year) {
+						yearCounts[year] = (yearCounts[year] || 0) + 1;
+					}
+				});
+
+				const sortedYears = Object.keys(yearCounts).sort();
+				const counts = sortedYears.map(year => yearCounts[year]);
+
+				visualizationCharts.yearChart = new Chart(ctx, {
+					type: 'line',
+					data: {
+						labels: sortedYears,
+						datasets: [{
+							label: 'Papers Published',
+							data: counts,
+							borderColor: chartColors.primary,
+							backgroundColor: chartColors.primary + '20',
+							borderWidth: 3,
+							fill: true,
+							tension: 0.4,
+							pointBackgroundColor: chartColors.primary,
+							pointBorderColor: '#fff',
+							pointBorderWidth: 2,
+							pointRadius: 5
+						}]
+					},
+					options: {
+						responsive: true,
+						maintainAspectRatio: false,
+						plugins: {
+							legend: {
+								display: false
+							}
+						},
+						scales: {
+							y: {
+								beginAtZero: true,
+								ticks: {
+									stepSize: 1
+								}
+							}
+						}
+					}
+				});
+			}
+
+			function createVisualizationLanguageChart() {
+				const ctx = document.getElementById('languageChart').getContext('2d');
+				
+				if (visualizationCharts.languageChart) {
+					visualizationCharts.languageChart.destroy();
+				}
+				
+				const languageCounts = {};
+				researchData.forEach(paper => {
+					if (paper.matched_keywords) {
+						paper.matched_keywords.split(',').forEach(lang => {
+							const cleanLang = lang.trim();
+							if (cleanLang) {
+								languageCounts[cleanLang] = (languageCounts[cleanLang] || 0) + 1;
+							}
+						});
+					}
+				});
+
+				const sortedLanguages = Object.entries(languageCounts)
+					.sort((a, b) => b[1] - a[1])
+					.slice(0, 10);
+
+				const labels = sortedLanguages.map(([lang]) => lang);
+				const counts = sortedLanguages.map(([, count]) => count);
+
+				const backgroundColors = labels.map((_, i) => {
+					const hue = (i * 137.508) % 360;
+					return `hsla(${hue}, 70%, 60%, 0.8)`;
+				});
+
+				visualizationCharts.languageChart = new Chart(ctx, {
+					type: 'doughnut',
+					data: {
+						labels: labels,
+						datasets: [{
+							data: counts,
+							backgroundColor: backgroundColors,
+							borderWidth: 2,
+							borderColor: '#fff'
+						}]
+					},
+					options: {
+						responsive: true,
+						maintainAspectRatio: false,
+						plugins: {
+							legend: {
+								position: 'bottom',
+								labels: {
+									fontSize: 10,
+									usePointStyle: true
+								}
+							}
+						}
+					}
+				});
+			}
+
+			function createVisualizationTasksChart() {
+				const ctx = document.getElementById('tasksChart').getContext('2d');
+				
+				if (visualizationCharts.tasksChart) {
+					visualizationCharts.tasksChart.destroy();
+				}
+				
+				const taskCounts = {};
+				researchData.forEach(paper => {
+					if (paper.nlp_tasks) {
+						paper.nlp_tasks.split(',').forEach(task => {
+							const cleanTask = task.trim().replace(/[\[\]']/g, '');
+							if (cleanTask) {
+								taskCounts[cleanTask] = (taskCounts[cleanTask] || 0) + 1;
+							}
+						});
+					}
+				});
+
+				const sortedTasks = Object.entries(taskCounts)
+					.sort((a, b) => b[1] - a[1])
+					.slice(0, 15);
+
+				const labels = sortedTasks.map(([task]) => task);
+				const counts = sortedTasks.map(([, count]) => count);
+
+				visualizationCharts.tasksChart = new Chart(ctx, {
+					type: 'bar',
+					data: {
+						labels: labels,
+						datasets: [{
+							label: 'Number of Papers',
+							data: counts,
+							backgroundColor: chartColors.primary + '80',
+							borderColor: chartColors.primary,
+							borderWidth: 2
+						}]
+					},
+					options: {
+						responsive: true,
+						maintainAspectRatio: false,
+						indexAxis: 'y',
+						plugins: {
+							legend: {
+								display: false
+							}
+						},
+						scales: {
+							x: {
+								beginAtZero: true
+							},
+							y: {
+								ticks: {
+									font: {
+										size: 10
+									}
+								}
+							}
+						}
+					}
+				});
+			}
+
+			function createVisualizationGrowthChart() {
+				const ctx = document.getElementById('growthChart').getContext('2d');
+				
+				if (visualizationCharts.growthChart) {
+					visualizationCharts.growthChart.destroy();
+				}
+				
+				const yearCounts = {};
+				researchData.forEach(paper => {
+					const year = paper.year;
+					if (year) {
+						yearCounts[year] = (yearCounts[year] || 0) + 1;
+					}
+				});
+
+				const sortedYears = Object.keys(yearCounts).sort();
+				let cumulative = 0;
+				const cumulativeCounts = sortedYears.map(year => {
+					cumulative += yearCounts[year];
+					return cumulative;
+				});
+
+				visualizationCharts.growthChart = new Chart(ctx, {
+					type: 'bar',
+					data: {
+						labels: sortedYears,
+						datasets: [
+							{
+								label: 'Cumulative Papers',
+								data: cumulativeCounts,
+								type: 'line',
+								borderColor: chartColors.secondary,
+								backgroundColor: chartColors.secondary + '20',
+								borderWidth: 3,
+								fill: false,
+								yAxisID: 'y1'
+							},
+							{
+								label: 'Papers per Year',
+								data: sortedYears.map(year => yearCounts[year]),
+								backgroundColor: chartColors.primary + '60',
+								borderColor: chartColors.primary,
+								borderWidth: 2,
+								yAxisID: 'y'
+							}
+						]
+					},
+					options: {
+						responsive: true,
+						maintainAspectRatio: false,
+						interaction: {
+							mode: 'index',
+							intersect: false
+						},
+						scales: {
+							y: {
+								type: 'linear',
+								display: true,
+								position: 'left',
+								beginAtZero: true
+							},
+							y1: {
+								type: 'linear',
+								display: true,
+								position: 'right',
+								beginAtZero: true,
+								grid: {
+									drawOnChartArea: false,
+								}
+							}
+						}
+					}
+				});
+			}
+
+			function createVisualizationInstitutionChart() {
+				const ctx = document.getElementById('institutionChart').getContext('2d');
+				
+				if (visualizationCharts.institutionChart) {
+					visualizationCharts.institutionChart.destroy();
+				}
+				
+				const institutionCounts = {};
+				researchData.forEach(paper => {
+					if (paper.author_institutions) {
+						const institutions = paper.author_institutions
+							.split(/[,;]/)
+							.map(inst => inst.trim())
+							.filter(inst => inst.length > 0);
+						
+						institutions.forEach(institution => {
+							let normalized = institution
+								.replace(/\s+/g, ' ')
+								.replace(/,.*$/, '')
+								.trim();
+							
+							if (normalized) {
+								institutionCounts[normalized] = (institutionCounts[normalized] || 0) + 1;
+							}
+						});
+					}
+				});
+
+				const sortedInstitutions = Object.entries(institutionCounts)
+					.sort((a, b) => b[1] - a[1])
+					.slice(0, 10);
+
+				const labels = sortedInstitutions.map(([inst]) => {
+					return inst.length > 30 ? inst.substring(0, 27) + '...' : inst;
+				});
+				const counts = sortedInstitutions.map(([, count]) => count);
+
+				visualizationCharts.institutionChart = new Chart(ctx, {
+					type: 'bar',
+					data: {
+						labels: labels,
+						datasets: [{
+							label: 'Number of Papers',
+							data: counts,
+							backgroundColor: chartColors.primary + '70',
+							borderColor: chartColors.primary,
+							borderWidth: 2
+						}]
+					},
+					options: {
+						responsive: true,
+						maintainAspectRatio: false,
+						plugins: {
+							legend: {
+								display: false
+							}
+						},
+						scales: {
+							x: {
+								ticks: {
+									font: {
+										size: 10
+									},
+									maxRotation: 45
+								}
+							},
+							y: {
+								beginAtZero: true
+							}
+						}
+					}
+				});
+			}
+
+			// Filtered visualization functions (using filteredData)
+			function createFilteredVisualizationYearChart() {
+				const ctx = document.getElementById('yearChart').getContext('2d');
+				
+				if (visualizationCharts.yearChart) {
+					visualizationCharts.yearChart.destroy();
+				}
+				
+				const yearCounts = {};
+				filteredData.forEach(paper => {
+					const year = paper.year;
+					if (year) {
+						yearCounts[year] = (yearCounts[year] || 0) + 1;
+					}
+				});
+
+				const sortedYears = Object.keys(yearCounts).sort();
+				const counts = sortedYears.map(year => yearCounts[year]);
+
+				visualizationCharts.yearChart = new Chart(ctx, {
+					type: 'line',
+					data: {
+						labels: sortedYears,
+						datasets: [{
+							label: 'Papers Published',
+							data: counts,
+							borderColor: chartColors.primary,
+							backgroundColor: chartColors.primary + '20',
+							borderWidth: 3,
+							fill: true,
+							tension: 0.4,
+							pointBackgroundColor: chartColors.primary,
+							pointBorderColor: '#fff',
+							pointBorderWidth: 2,
+							pointRadius: 5
+						}]
+					},
+					options: {
+						responsive: true,
+						maintainAspectRatio: false,
+						plugins: {
+							legend: {
+								display: false
+							}
+						},
+						scales: {
+							y: {
+								beginAtZero: true,
+								ticks: {
+									stepSize: 1
+								}
+							}
+						}
+					}
+				});
+			}
+
+			function createFilteredVisualizationLanguageChart() {
+				const ctx = document.getElementById('languageChart').getContext('2d');
+				
+				if (visualizationCharts.languageChart) {
+					visualizationCharts.languageChart.destroy();
+				}
+				
+				const languageCounts = {};
+				filteredData.forEach(paper => {
+					if (paper.matched_keywords) {
+						paper.matched_keywords.split(',').forEach(lang => {
+							const cleanLang = lang.trim();
+							if (cleanLang) {
+								languageCounts[cleanLang] = (languageCounts[cleanLang] || 0) + 1;
+							}
+						});
+					}
+				});
+
+				const sortedLanguages = Object.entries(languageCounts)
+					.sort((a, b) => b[1] - a[1])
+					.slice(0, 10);
+
+				const labels = sortedLanguages.map(([lang]) => lang);
+				const counts = sortedLanguages.map(([, count]) => count);
+
+				const backgroundColors = labels.map((_, i) => {
+					const hue = (i * 137.508) % 360;
+					return `hsla(${hue}, 70%, 60%, 0.8)`;
+				});
+
+				visualizationCharts.languageChart = new Chart(ctx, {
+					type: 'doughnut',
+					data: {
+						labels: labels,
+						datasets: [{
+							data: counts,
+							backgroundColor: backgroundColors,
+							borderWidth: 2,
+							borderColor: '#fff'
+						}]
+					},
+					options: {
+						responsive: true,
+						maintainAspectRatio: false,
+						plugins: {
+							legend: {
+								position: 'bottom',
+								labels: {
+									fontSize: 10,
+									usePointStyle: true
+								}
+							}
+						}
+					}
+				});
+			}
+
+			function createFilteredVisualizationTasksChart() {
+				const ctx = document.getElementById('tasksChart').getContext('2d');
+				
+				if (visualizationCharts.tasksChart) {
+					visualizationCharts.tasksChart.destroy();
+				}
+				
+				const taskCounts = {};
+				filteredData.forEach(paper => {
+					if (paper.nlp_tasks) {
+						paper.nlp_tasks.split(',').forEach(task => {
+							const cleanTask = task.trim().replace(/[\[\]']/g, '');
+							if (cleanTask) {
+								taskCounts[cleanTask] = (taskCounts[cleanTask] || 0) + 1;
+							}
+						});
+					}
+				});
+
+				const sortedTasks = Object.entries(taskCounts)
+					.sort((a, b) => b[1] - a[1])
+					.slice(0, 15);
+
+				const labels = sortedTasks.map(([task]) => task);
+				const counts = sortedTasks.map(([, count]) => count);
+
+				visualizationCharts.tasksChart = new Chart(ctx, {
+					type: 'bar',
+					data: {
+						labels: labels,
+						datasets: [{
+							label: 'Number of Papers',
+							data: counts,
+							backgroundColor: chartColors.primary + '80',
+							borderColor: chartColors.primary,
+							borderWidth: 2
+						}]
+					},
+					options: {
+						responsive: true,
+						maintainAspectRatio: false,
+						indexAxis: 'y',
+						plugins: {
+							legend: {
+								display: false
+							}
+						},
+						scales: {
+							x: {
+								beginAtZero: true
+							},
+							y: {
+								ticks: {
+									font: {
+										size: 10
+									}
+								}
+							}
+						}
+					}
+				});
+			}
+
+			function createFilteredVisualizationGrowthChart() {
+				const ctx = document.getElementById('growthChart').getContext('2d');
+				
+				if (visualizationCharts.growthChart) {
+					visualizationCharts.growthChart.destroy();
+				}
+				
+				const yearCounts = {};
+				filteredData.forEach(paper => {
+					const year = paper.year;
+					if (year) {
+						yearCounts[year] = (yearCounts[year] || 0) + 1;
+					}
+				});
+
+				const sortedYears = Object.keys(yearCounts).sort();
+				let cumulative = 0;
+				const cumulativeCounts = sortedYears.map(year => {
+					cumulative += yearCounts[year];
+					return cumulative;
+				});
+
+				visualizationCharts.growthChart = new Chart(ctx, {
+					type: 'bar',
+					data: {
+						labels: sortedYears,
+						datasets: [
+							{
+								label: 'Cumulative Papers',
+								data: cumulativeCounts,
+								type: 'line',
+								borderColor: chartColors.secondary,
+								backgroundColor: chartColors.secondary + '20',
+								borderWidth: 3,
+								fill: false,
+								yAxisID: 'y1'
+							},
+							{
+								label: 'Papers per Year',
+								data: sortedYears.map(year => yearCounts[year]),
+								backgroundColor: chartColors.primary + '60',
+								borderColor: chartColors.primary,
+								borderWidth: 2,
+								yAxisID: 'y'
+							}
+						]
+					},
+					options: {
+						responsive: true,
+						maintainAspectRatio: false,
+						interaction: {
+							mode: 'index',
+							intersect: false
+						},
+						scales: {
+							y: {
+								type: 'linear',
+								display: true,
+								position: 'left',
+								beginAtZero: true
+							},
+							y1: {
+								type: 'linear',
+								display: true,
+								position: 'right',
+								beginAtZero: true,
+								grid: {
+									drawOnChartArea: false,
+								}
+							}
+						}
+					}
+				});
+			}
+
+			function createFilteredVisualizationInstitutionChart() {
+				const ctx = document.getElementById('institutionChart').getContext('2d');
+				
+				if (visualizationCharts.institutionChart) {
+					visualizationCharts.institutionChart.destroy();
+				}
+				
+				const institutionCounts = {};
+				filteredData.forEach(paper => {
+					if (paper.author_institutions) {
+						const institutions = paper.author_institutions
+							.split(/[,;]/)
+							.map(inst => inst.trim())
+							.filter(inst => inst.length > 0);
+						
+						institutions.forEach(institution => {
+							let normalized = institution
+								.replace(/\s+/g, ' ')
+								.replace(/,.*$/, '')
+								.trim();
+							
+							if (normalized) {
+								institutionCounts[normalized] = (institutionCounts[normalized] || 0) + 1;
+							}
+						});
+					}
+				});
+
+				const sortedInstitutions = Object.entries(institutionCounts)
+					.sort((a, b) => b[1] - a[1])
+					.slice(0, 10);
+
+				const labels = sortedInstitutions.map(([inst]) => {
+					return inst.length > 30 ? inst.substring(0, 27) + '...' : inst;
+				});
+				const counts = sortedInstitutions.map(([, count]) => count);
+
+				visualizationCharts.institutionChart = new Chart(ctx, {
+					type: 'bar',
+					data: {
+						labels: labels,
+						datasets: [{
+							label: 'Number of Papers',
+							data: counts,
+							backgroundColor: chartColors.primary + '70',
+							borderColor: chartColors.primary,
+							borderWidth: 2
+						}]
+					},
+					options: {
+						responsive: true,
+						maintainAspectRatio: false,
+						plugins: {
+							legend: {
+								display: false
+							}
+						},
+						scales: {
+							x: {
+								ticks: {
+									font: {
+										size: 10
+									},
+									maxRotation: 45
+								}
+							},
+							y: {
+								beginAtZero: true
+							}
+						}
+					}
+				});
+			}
+		</script>
+	</body>
+</html>
